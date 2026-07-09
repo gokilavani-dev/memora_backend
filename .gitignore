@@ -1,0 +1,8 @@
+// Env file
+.env
+
+//Node modules folder
+node_modules
+
+//Notes
+notes.txt
