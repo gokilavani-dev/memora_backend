@@ -12,12 +12,16 @@ export async function createNote(
   userId: string,
   title: string,
   content: string,
+  fileId?: string,
+  fileName?: string,
 ) {
   const newNote = {
     userId,
     noteId: uuidv4(),
     title,
     content,
+    fileId,
+    fileName,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

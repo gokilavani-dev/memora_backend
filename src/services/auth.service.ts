@@ -67,7 +67,7 @@ export async function login(email: string, password: string) {
     { userId: foundUser.id },
     process.env.JWT_SECRET!,
     {
-      expiresIn: "15m",
+      expiresIn: "7d",
     },
   );
 

@@ -10,8 +10,8 @@ import {
 export async function createNoteController(req: Request, res: Response) {
   try {
     const userId = (req as any).userId;
-    const { title, content } = req.body;
-    const note = await createNote(userId, title, content);
+    const { title, content, fileId, fileName } = req.body;
+    const note = await createNote(userId, title, content, fileId, fileName);
     res.status(201).json(note);
   } catch (error) {
     const message =
