@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   createNote,
   deleteNote,
@@ -6,6 +6,7 @@ import {
   getNotes,
   updateNote,
 } from "../services/note.service";
+import { askQuestion } from "../services/similarity.service";
 
 export async function createNoteController(req: Request, res: Response) {
   try {
@@ -69,5 +70,29 @@ export async function deleteNoteController(req: Request, res: Response) {
     const message =
       error instanceof Error ? error.message : "Something went wrong";
     res.status(500).json({ message });
+  }
+}
+
+export async function askNote(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = (req as any).userId;
+    const { noteId } = req.params;
+    const { question } = req.body;
+
+    if (!noteId || typeof noteId !== "string") {
+      return res.status(400).json({ message: "noteId is required" });
+    }
+
+    const note = await getNote(userId, noteId);
+    if (!note) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to access this note" });
+    }
+
+    const result = await askQuestion(noteId, question);
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
 }
