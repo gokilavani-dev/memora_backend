@@ -7,6 +7,8 @@ import {
   UpdateCommand,
   DeleteCommand,
 } from "@aws-sdk/lib-dynamodb";
+import { embedChunks, saveChunksToDb } from "./embedding.service";
+import { chunkText } from "./chunking.service";
 
 export async function createNote(
   userId: string,
@@ -27,6 +29,25 @@ export async function createNote(
   };
 
   await ddb.send(new PutCommand({ TableName: "Notes", Item: newNote }));
+
+  // 👇 புது logic — chunking pipeline
+  let textToChunk = content; // default: plain note content
+
+  if (fileId) {
+    const fileResult = await ddb.send(
+      new GetCommand({
+        TableName: "Files",
+        Key: { userId, fileId },
+      }),
+    );
+    if (fileResult.Item?.extractedText) {
+      textToChunk = fileResult.Item.extractedText; // file இருந்தா, முழு text use பண்ணு
+    }
+  }
+
+  const chunks = chunkText(textToChunk);
+  const embeddedChunks = await embedChunks(chunks);
+  await saveChunksToDb(newNote.noteId, embeddedChunks);
 
   return newNote;
 }
