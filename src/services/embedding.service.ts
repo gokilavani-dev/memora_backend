@@ -18,14 +18,18 @@ export async function embedText(text: string): Promise<number[]> {
 }
 
 export async function embedChunks(chunks: Chunk[]): Promise<Chunk[]> {
-  for (const chunk of chunks) {
-    const response = await genAI.models.embedContent({
-      model: "gemini-embedding-001",
-      contents: chunk.text,
-    });
+  const texts = chunks.map((chunk) => chunk.text); // 👈 எல்லா chunk texts-ஐயும் ஒரே array ஆ
 
-    chunk.embedding = response.embeddings?.[0]?.values ?? [];
-  }
+  const response = await genAI.models.embedContent({
+    model: "gemini-embedding-001",
+    contents: texts, // 👈 array pass பண்றோம், single string இல்ல
+  });
+
+  const embeddings = response.embeddings ?? [];
+
+  chunks.forEach((chunk, index) => {
+    chunk.embedding = embeddings[index]?.values ?? [];
+  });
 
   return chunks;
 }
