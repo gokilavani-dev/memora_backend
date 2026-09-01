@@ -21,7 +21,7 @@ export async function embedChunks(chunks: Chunk[]): Promise<Chunk[]> {
   const texts = chunks.map((chunk) => chunk.text); // 👈 எல்லா chunk texts-ஐயும் ஒரே array ஆ
 
   const response = await genAI.models.embedContent({
-    model: "text-embedding-004",
+    model: "gemini-embedding-001",
     contents: texts, // 👈 array pass பண்றோம், single string இல்ல
   });
 
