@@ -82,7 +82,7 @@ ${context}
 Question: ${question}`;
 
   const response = await genAI.models.generateContent({
-    model: "gemini-flash-latest",
+    model: "gemini-3.6-flash",
     contents: prompt,
   });
 
@@ -90,7 +90,10 @@ Question: ${question}`;
 }
 
 export async function askQuestion(noteId: string, question: string) {
+  console.log("Step 1: searching notes...");
   const topChunks = await searchNotes(noteId, question, 3);
+  console.log("Step 2: chunks found, generating answer...");
   const answer = await generateAnswer(question, topChunks);
+  console.log("Step 3: answer generated!");
   return { answer, sources: topChunks.map((c) => c.chunkId) };
 }

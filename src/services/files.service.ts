@@ -113,7 +113,7 @@ If there are no action items, return an empty array.
 Text:
 ${file.extractedText.slice(0, 15000)}`;
   const response = await genAI.models.generateContent({
-    model: "gemini-flash-latest",
+    model: "gemini-3.6-flash",
     contents: prompt,
   });
   const rawText = response.text;

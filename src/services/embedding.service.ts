@@ -10,7 +10,7 @@ interface Chunk {
 
 export async function embedText(text: string): Promise<number[]> {
   const response = await genAI.models.embedContent({
-    model: "gemini-embedding-001",
+    model: "text-embedding-004",
     contents: text,
   });
 
@@ -21,7 +21,7 @@ export async function embedChunks(chunks: Chunk[]): Promise<Chunk[]> {
   const texts = chunks.map((chunk) => chunk.text); // 👈 எல்லா chunk texts-ஐயும் ஒரே array ஆ
 
   const response = await genAI.models.embedContent({
-    model: "gemini-embedding-001",
+    model: "text-embedding-004",
     contents: texts, // 👈 array pass பண்றோம், single string இல்ல
   });
 
