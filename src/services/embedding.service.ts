@@ -10,7 +10,7 @@ interface Chunk {
 
 export async function embedText(text: string): Promise<number[]> {
   const response = await genAI.models.embedContent({
-    model: "text-embedding-004",
+    model: "gemini-embedding-001",
     contents: text,
   });
 
